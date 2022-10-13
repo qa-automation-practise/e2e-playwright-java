@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="Open Cart Test Regression PW Suite" verbose="4">
+
+	<test name="login - safari">
+		<parameter name="browser" value="safari" />
+		<classes>
+			<class name="com.saucedemo.tests.LoginTest" />
+		</classes>
+	</test>
+
+    <test name="login - chrome">
+		<parameter name="browser" value="chrome" />
+		<classes>
+			<class name="com.saucedemo.tests.LoginTest" />
+		</classes>
+	</test>
+
+    <test name="login - mozilla">
+		<parameter name="browser" value="firefox" />
+		<classes>
+			<class name="com.saucedemo.tests.LoginTest" />
+		</classes>
+	</test>
+
+    <test name="login - chromium">
+		<parameter name="browser" value="chromium" />
+		<classes>
+			<class name="com.saucedemo.tests.LoginTest" />
+		</classes>
+	</test>
+
+</suite>
