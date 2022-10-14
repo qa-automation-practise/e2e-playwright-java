@@ -8,6 +8,5 @@ public class LoginTest extends BaseTest {
 	@Test(priority = 1)
 	public void SuccessLoginTest() {
 		Assert.assertTrue(loginPage.doLogin(prop.getProperty("username").trim(), prop.getProperty("password").trim()));
-		//Test
 	}
 }
