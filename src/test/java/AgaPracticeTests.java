@@ -9,7 +9,8 @@ import org.testng.annotations.Test;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 //TODO Try with chrome-beta
-//TODO Run the test with mvn command - mvn exec:java -D"exec.mainClass"="AgaPracticeTests" (quotes on Windows!)
+//TODO Try tracing with chunk
+//DONE Run the test with mvn command - mvn exec:java -D"exec.mainClass"="AgaPracticeTests" (quotes on Windows!)
 
 public class AgaPracticeTests {
 
@@ -17,6 +18,7 @@ public class AgaPracticeTests {
     Browser browser;
     Page page;
     BrowserType.LaunchOptions lp;
+    BrowserContext context;
 
     @BeforeMethod
     public void beforeTest() {
@@ -51,9 +53,47 @@ public class AgaPracticeTests {
 
     }
 
+    @Test(enabled = true)
+    public void howToUseTraceViewer(){
+        //Creates new tab(??) with separate cookies and cache
+        context = browser.newContext();
+
+        // Start tracing before creating / navigating a page.
+        //Screenshots = screen photos; Snapshots = recorded DOM structure and network activity; Sources = source code to include in env variables
+        context.tracing().start(new Tracing.StartOptions()
+                .setName("MyFirstRecord!!!!")
+                .setScreenshots(true)
+                .setSnapshots(true)
+                .setSources(false)
+                .setTitle("Title for my first record!"));
+
+        //here should be the test code or the test will be get from getSources method
+        page = context.newPage();
+        page.navigate("https://www.saucedemo.com/");
+        page.locator("[data-test=\"username\"]").click();
+        page.locator("[data-test=\"username\"]").fill("test");
+        page.locator("[data-test=\"username\"]").press("Tab");
+        page.locator("[data-test=\"password\"]").fill("test");
+        page.locator("[data-test=\"username\"]").dblclick();
+        page.locator("[data-test=\"username\"]").fill("standard_user");
+        page.locator("[data-test=\"username\"]").press("Tab");
+        page.locator("[data-test=\"password\"]").fill("secret_sauce");
+        page.locator("[data-test=\"password\"]").press("Enter");
+
+        assertThat(page).hasURL("https://www.saucedemo.com/inventory.html");
+
+        // Stop tracing and export it into a zip archive.
+        // To open the zip file: https://trace.playwright.dev/
+        context.tracing().stop(new Tracing.StopOptions()
+                .setPath(Paths.get("src/test/resources/TraceViewer/trace.zip")));
+
+    }
+
+
     @Test(enabled = false)
-    public void howToGenerateCode(){
+    public void howToGenerateCodeAndDebugging(){
         //PWDEBUG = 1
+        //page.pause();
         //mvn exec:java -e -D"exec.mainClass"="com.microsoft.playwright.CLI" -D"exec.args"="codegen https://www.saucedemo.com/"
 
         // Go to https://www.saucedemo.com/
@@ -62,6 +102,7 @@ public class AgaPracticeTests {
         page.locator("[data-test=\"username\"]").click();
         // Fill [data-test="username"]
         page.locator("[data-test=\"username\"]").fill("test");
+        page.pause();
         // Press Tab
         page.locator("[data-test=\"username\"]").press("Tab");
         // Fill [data-test="password"]
