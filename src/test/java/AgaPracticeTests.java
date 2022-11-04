@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 //TODO Try with chrome-beta
-//TODO Try tracing with chunk
+//DONE Try tracing with chunk
 //DONE Run the test with mvn command - mvn exec:java -D"exec.mainClass"="AgaPracticeTests" (quotes on Windows!)
 
 public class AgaPracticeTests {
@@ -37,6 +37,30 @@ public class AgaPracticeTests {
     }
 
     @Test(enabled = false)
+    public void whatIsBrowserContext() {
+        //BrowserContext is new browser window in incognito mode, with separate cookies and cache
+        //It's possible to have a few context browsers at the same time
+        BrowserContext browserContext1 = browser.newContext();
+        Page page1 = browserContext1.newPage();
+        page1.navigate("https://www.saucedemo.com/");
+        page1.locator("[data-test=\"username\"]").fill("page1");
+        page1.waitForTimeout(3000);
+
+        BrowserContext browserContext2 = browser.newContext();
+        Page page2 = browserContext1.newPage();
+        page2.navigate("https://www.saucedemo.com/");
+        page2.locator("[data-test=\"username\"]").fill("page2");
+        page2.waitForTimeout(3000);
+
+        //good practices - first close the page then the context browser and at the end the browser
+        page1.close();
+        browserContext1.close();
+
+        page2.close();
+        browserContext2.close();
+    }
+
+    @Test(enabled = false)
     public void howToDoScreenshotsAndVideoRecords() {
         System.out.println(page.title());
         page.screenshot(new Page.ScreenshotOptions()
@@ -53,7 +77,7 @@ public class AgaPracticeTests {
 
     }
 
-    @Test(enabled = true)
+    @Test(enabled = false)
     public void howToUseTraceViewer(){
         //Creates new tab(??) with separate cookies and cache
         context = browser.newContext();
