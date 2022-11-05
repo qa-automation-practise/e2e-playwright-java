@@ -1,6 +1,7 @@
 import com.microsoft.playwright.*;
 
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -33,6 +34,38 @@ public class AgaPracticeTests {
         browser = playwright.chromium().launch(lp);
         page = browser.newPage();
         page.navigate("https://playwright.dev/java/docs/screenshots#full-page-screenshots");
+
+    }
+
+    @Test(enabled = false)
+    public void howToUseSelectors() {
+        //The use of ElementHandle class is discouraged, better to use Locator class
+
+        //Locator represents element (or elements) which matches the pattern
+        Locator naviBarElements = page.locator("xpath=//ul[@class='dropdown__menu']/li/a");
+        System.out.println("Number of elements with this locator: " + naviBarElements.count());
+        System.out.println("Text in all elements: " + naviBarElements.allTextContents().toString());
+        //nth = n-ty (enty) element
+        System.out.println("Text of the first element: " + naviBarElements.nth(0).textContent());
+        System.out.println("Last element: " + naviBarElements.last());
+        System.out.println("Href attribute in first element: " + naviBarElements.first().getAttribute("href"));
+        System.out.println("Class attribute of the third element: " + naviBarElements.nth(2).getAttribute("class"));
+        System.out.println("Text in the last element: " + naviBarElements.last().innerHTML());
+
+        System.out.println("All visible text in the locator: " + naviBarElements.allInnerTexts());
+        System.out.println("All text (also hidden) in the locator: " + naviBarElements.allTextContents());
+
+        Locator element = page.locator("//a[@class='menu__link menu__link--sublist menu__link--sublist-caret menu__link--active']");
+        //click on the elem
+        element.click();
+        //also click on the elem
+        element.dispatchEvent("click");
+        //call focus on the elem
+        element.focus();
+        //element.highlight();
+        System.out.println("Elem page: " + element.page().title());
+        element.screenshot(new Locator.ScreenshotOptions().setPath(Paths.get("src/test/resources/Screens/Element_test.png")));
+
 
     }
 
@@ -70,11 +103,6 @@ public class AgaPracticeTests {
         page.locator("//code[contains(@class, 'codeBlockLines_e6Vv')]")
                 .nth(0)
                 .screenshot(new Locator.ScreenshotOptions().setPath(Paths.get("src/test/resources/Screens/Element_test.png")));
-    }
-
-    @Test(enabled = false)
-    public void howToUseSelectors() {
-
     }
 
     @Test(enabled = false)
