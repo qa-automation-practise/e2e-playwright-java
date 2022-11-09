@@ -37,11 +37,56 @@ public class AgaPracticeTests {
 
     }
 
-    @Test(enabled = false)
+    @Test(enabled = true)
     public void howToUseSelectors() {
+        page.navigate("https://www.saucedemo.com/");
+
+        //Text
+        System.out.println(page.locator("text=Password for all users:").textContent());
+        System.out.println(page.locator("h4:has-text('Password for all users:')").textContent());
+        System.out.println(page.locator("div.login_password h4:has-text('Password for all users:')\n").textContent());
+
+        //css
+        System.out.println(page.locator("h4").allTextContents());
+        System.out.println(page.locator("h4 >> text=Password for all users:").textContent());
+
+        //visible elements
+        System.out.println(page.locator("h4:visible").allTextContents());
+        System.out.println(page.locator("h4 >> visible=true").allTextContents());
+
+        //element that contains another
+        System.out.println(page.locator("h4", new Page.LocatorOptions().setHasText("Password for all users:")).textContent());
+        System.out.println(page.locator("div.login_password", new Page.LocatorOptions().setHas(page.locator("h4"))).textContent());
+        System.out.println(page.locator("div.login_password:has(h4)").textContent());
+
+        //scope
+        Locator headers = page.locator("h4");
+        System.out.println(headers.locator(":scope", new Locator.LocatorOptions().setHasText("password")).textContent());
+
+        //element that matching one of the conditions
+        //get all match elements
+        System.out.println("OR :" + page.locator("h4:has-text('Accepted usernames are:'), h4:has-text('Password for all users:')").allTextContents());
+        // with xpath |
+        System.out.println("AND: " + page.locator("//h4[text()='Accepted usernames are:'] | //h4[text()='Password for all users:']").allTextContents());
+
+        //elem in shadow DOM
+        //elem based on layout
+        //xpath
+        //n-th
+        //react
+        //vue
+        //id, data-testid, data-test-id, data-test
+        //pick n-th match from queery result
+        //chaining selectors
+
+
+    }
+
+    @Test(enabled = false)
+    public void howToUseLocators() {
         //The use of ElementHandle class is discouraged, better to use Locator class
 
-        //Locator represents element (or elements) which matches the pattern
+        //Locator represents element (or elements) which matches the pattern (selector)
         Locator naviBarElements = page.locator("xpath=//ul[@class='dropdown__menu']/li/a");
         System.out.println("Number of elements with this locator: " + naviBarElements.count());
         System.out.println("Text in all elements: " + naviBarElements.allTextContents().toString());
