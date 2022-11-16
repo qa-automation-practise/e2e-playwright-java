@@ -37,7 +37,7 @@ public class AgaPracticeTests {
 
     }
 
-    @Test(enabled = true)
+    @Test(enabled = false)
     public void howToUseSelectors() {
         page.navigate("https://www.saucedemo.com/");
 
@@ -69,14 +69,40 @@ public class AgaPracticeTests {
         // with xpath |
         System.out.println("AND: " + page.locator("//h4[text()='Accepted usernames are:'] | //h4[text()='Password for all users:']").allTextContents());
 
-        //elem in shadow DOM
+        //elem in shadow DOM ??
+        page.navigate("https://the-internet.herokuapp.com/shadowdom");
+        System.out.println(page.locator("text=Let's have some different text!").allTextContents());
+        System.out.println(page.locator("slot").allTextContents());
+        System.out.println(page.locator("my-paragraph").allTextContents());
+        System.out.println(page.locator(":light(my-paragraph)").allTextContents());
+
         //elem based on layout
+        page.navigate("https://www.saucedemo.com/");
+        System.out.println(page.locator("h4:right-of(h4)").allTextContents());
+        System.out.println(page.locator("h4:left-of(h4)").allTextContents());
+        System.out.println(page.locator("h4:below(input[id=login-button])").allTextContents());
+        System.out.println(page.locator("h4:below(div[class=bot_column])").allTextContents());
+
         //xpath
+        System.out.println("XPath h4: " + page.locator("//h4").allTextContents());
+        System.out.println("XPath: " + page.locator( "//h4[text()='Accepted usernames are:']").textContent());
+
         //n-th
-        //react
-        //vue
+        // first h4
+        System.out.println("h4 nth=0: " + page.locator("//h4 >> nth=0").allTextContents());
+
+        // Click last button
+        System.out.println("h4 nth=-1: " + page.locator("//h4 >> nth=-1").allTextContents());
+
+        //react - experimental
+        //vue - experimental
+
+        System.out.println("Role: " + page.locator("role=button").allTextContents());
+
         //id, data-testid, data-test-id, data-test
+
         //pick n-th match from queery result
+
         //chaining selectors
 
 
